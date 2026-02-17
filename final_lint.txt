@@ -1,0 +1,14 @@
+
+> aquasense@1.0.0 lint
+> eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0
+
+
+C:\Users\Albin_Biju\Desktop\Aqua_Sence\scripts\simulate_sensors.js
+  22:7  warning  'SENSOR_ID' is assigned a value but never used  no-unused-vars
+
+C:\Users\Albin_Biju\Desktop\Aqua_Sence\src\pages\Dashboard.jsx
+  5:60  warning  'ArrowUpRight' is defined but never used  no-unused-vars
+
+✖ 2 problems (0 errors, 2 warnings)
+
+ESLint found too many warnings (maximum: 0).

@@ -1,0 +1,44 @@
+﻿
+> aquasense@1.0.0 lint
+> eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0
+
+
+C:\Users\Albin_Biju\Desktop\Aqua_Sence\scripts\simulate_sensors.js
+  22:7  warning  'SENSOR_ID' is assigned a value but never used  no-unused-vars
+
+C:\Users\Albin_Biju\Desktop\Aqua_Sence\src\components\Sidebar.jsx
+  2:19  warning  'Link' is defined but never used  no-unused-vars
+
+C:\Users\Albin_Biju\Desktop\Aqua_Sence\src\pages\Settings.jsx
+  6:10  warning  'motion' is defined but never used  no-unused-vars
+
+C:\Users\Albin_Biju\Desktop\Aqua_Sence\src\services\blynkService.js
+  6:7  warning  'BLYNK_SERVER' is assigned a value but never used  no-unused-vars
+
+Γ£û 4 problems (0 errors, 4 warnings)
+
+node.exe : ESLint 
+found too many 
+warnings (maximum: 
+0).
+At line:1 char:1
++ & "C:\Program Files
+\nodejs/node.exe" 
+"C:\Program 
+Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~
+    + CategoryInfo   
+           : NotSpe  
+  cified: (ESLint    
+ found to...s (ma    
+ximum: 0).:Strin    
+g) [], RemoteExc    
+eption
+    + FullyQualified 
+   ErrorId : Native  
+  CommandError
+ 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "90435088180",
+    "project_id": "aqua-sense-7d9d4",
+    "storage_bucket": "aqua-sense-7d9d4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:90435088180:android:9c8e3d80bee7208fda7f61",
+        "android_client_info": {
+          "package_name": "com.example.flutter_application_1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBdgMQTIGRNFcmvszxyQbG-H4GCcRY58yc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
