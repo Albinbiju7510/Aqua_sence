@@ -206,19 +206,19 @@ export default function Dashboard() {
         }
 
         // Additional Vibration Check based on Admin Threshold
-        if (currentData.vibration >= VIB_THRESHOLD && currentData.vibrationAlarm === 0) {
-            // Trigger a manual software alarm if hardware didn't catch it
-            setCurrentData(prev => ({ ...prev, vibrationAlarm: 1 }));
-        } else if (currentData.vibration < VIB_THRESHOLD && currentData.vibrationAlarm === 1 && dataSource === 'simulated') {
-            // Revert software alarm in simulated mode if vibration drops
-            setCurrentData(prev => ({ ...prev, vibrationAlarm: 0 }));
-        }
+        const isVibRmsHigh = currentData.vibration >= VIB_THRESHOLD;
+        const isVibAlarmHigh = currentData.vibrationAlarm === 1;
 
-    }, [currentData.flowRate, currentData.pressure, currentData.vibration, leakStartTime, leakDetected, isDemoSimulating, thresholds]);
+        // We do not artificially mutate currentData.vibrationAlarm here 
+        // to avoid infinite loops and false persistence.
+
+    }, [currentData.flowRate, currentData.pressure, currentData.vibration, currentData.vibrationAlarm, leakStartTime, leakDetected, isDemoSimulating, thresholds]);
+
+    const isVibrationAlarm = currentData.vibration >= thresholds.vibrationLimit || currentData.vibrationAlarm === 1;
 
     // Logging Alert
     useEffect(() => {
-        if (leakDetected || currentData.vibrationAlarm === 1) {
+        if (leakDetected || isVibrationAlarm) {
             const now = new Date();
             const timeMs = now.getTime();
             const type = leakDetected ? 'Leak Detected' : 'Vibration Alarm';
@@ -252,7 +252,7 @@ export default function Dashboard() {
                 maintenanceStatus: 'pending'
             }).catch(console.error);
         }
-    }, [leakDetected, currentData.vibrationAlarm, mainValve, currentData]);
+    }, [leakDetected, isVibrationAlarm, mainValve, currentData]);
 
     const handleDemoMode = () => {
         if (dataSource !== 'simulated') {
@@ -282,7 +282,6 @@ export default function Dashboard() {
     };
 
     const isLeak = currentData.leakStatus === 1;
-    const isVibrationAlarm = currentData.vibrationAlarm === 1;
 
     const getConnectionStatus = () => {
         if (dataSource === 'simulated') return { label: 'Simulation Mode', color: 'text-amber-500', dot: 'bg-amber-500' };
