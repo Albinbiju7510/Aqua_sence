@@ -74,11 +74,11 @@ export default function Dashboard() {
             // Demo Mode Workflow simulation: 6 steps
             const startTimer = setTimeout(() => {
                 const simulatedData = {
-                    flowRate: 0.8,
+                    flowRate: thresholds.flowLimit + 1.2,
                     totalUsage: 25.4,
                     leakStatus: 0,
                     vibration: 0.05,
-                    pressure: 42,
+                    pressure: (thresholds.pressureLimit || 50) + 10,
                     vibrationAlarm: 0,
                     timestamp: Date.now()
                 };
@@ -192,7 +192,7 @@ export default function Dashboard() {
         const VIB_THRESHOLD = thresholds.vibrationLimit;
 
         // Flow Leak Logic
-        if (currentData.flowRate > FLOW_THRESHOLD || currentData.pressure > PRESSURE_THRESHOLD) {
+        if (currentData.flowRate >= FLOW_THRESHOLD || currentData.pressure >= PRESSURE_THRESHOLD) {
             if (!leakStartTime) {
                 setLeakStartTime(Date.now());
             } else if (Date.now() - leakStartTime > PERSISTENCE_MS) {
@@ -206,15 +206,15 @@ export default function Dashboard() {
         }
 
         // Additional Vibration Check based on Admin Threshold
-        if (currentData.vibration > VIB_THRESHOLD && currentData.vibrationAlarm === 0) {
+        if (currentData.vibration >= VIB_THRESHOLD && currentData.vibrationAlarm === 0) {
             // Trigger a manual software alarm if hardware didn't catch it
             setCurrentData(prev => ({ ...prev, vibrationAlarm: 1 }));
-        } else if (currentData.vibration <= VIB_THRESHOLD && currentData.vibrationAlarm === 1 && dataSource === 'simulated') {
+        } else if (currentData.vibration < VIB_THRESHOLD && currentData.vibrationAlarm === 1 && dataSource === 'simulated') {
             // Revert software alarm in simulated mode if vibration drops
             setCurrentData(prev => ({ ...prev, vibrationAlarm: 0 }));
         }
 
-    }, [currentData.flowRate, currentData.vibration, leakStartTime, leakDetected, isDemoSimulating, thresholds]);
+    }, [currentData.flowRate, currentData.pressure, currentData.vibration, leakStartTime, leakDetected, isDemoSimulating, thresholds]);
 
     // Logging Alert
     useEffect(() => {
@@ -375,7 +375,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                             <div className="font-bold text-lg">Leak Detected</div>
-                            <div className="text-sm opacity-90">Abnormal water flow persists. Critical leak threshold exceeded.</div>
+                            <div className="text-sm opacity-90">Abnormal fluid dynamics persist. Thresholds Exceeded - Flow limit: {thresholds.flowLimit} L/min, Pressure limit: {thresholds.pressureLimit || 50} PSI.</div>
                         </div>
                     </div>
                 )}
@@ -386,7 +386,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                             <div className="font-bold text-lg">Abnormal Vibration Detected</div>
-                            <div className="text-sm opacity-90">Warning: Excessive mechanical vibration detected. Check pipe mounting.</div>
+                            <div className="text-sm opacity-90">Warning: Excessive mechanical vibration detected. Limit exceeded: {thresholds.vibrationLimit} g.</div>
                         </div>
                     </div>
                 )}
