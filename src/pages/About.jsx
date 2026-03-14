@@ -1,6 +1,9 @@
 import { Github, Linkedin, Mail, Droplets } from 'lucide-react';
 import { motion } from 'framer-motion';
 import teamLeadImg from '../assets/team_lead.jpg';
+import aromalImg from '../assets/team/aromal.jpg';
+import anselImg from '../assets/team/ansel.jpg';
+import christoImg from '../assets/team/christo.jpg';
 
 export default function About() {
     return (
@@ -26,9 +29,9 @@ export default function About() {
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20 text-center">
                     <TeamMember name="Albin Biju" role="Team Lead" image={teamLeadImg} delay={0.1} />
-                    <TeamMember name="Christo G Mathew" role="Team Member" delay={0.2} />
-                    <TeamMember name="Ansel A Jiji" role="Team Member" delay={0.3} />
-                    <TeamMember name="Aromal M I" role="Team Member" delay={0.4} />
+                    <TeamMember name="Aromal M" role="Team Member" image={aromalImg} delay={0.2} />
+                    <TeamMember name="Christo Mathew George" role="Team Member" image={christoImg} delay={0.3} />
+                    <TeamMember name="Ansel A jiji" role="Team Member" image={anselImg} delay={0.4} />
                 </div>
 
                 <div className="glass-card p-10 text-center max-w-4xl mx-auto">

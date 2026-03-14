@@ -1,7 +1,7 @@
 
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Users, Droplets, LogOut, Settings, User } from 'lucide-react';
-import { useAuth } from '../contexts/AuthContext';
+import { LayoutDashboard, Users, Droplets, LogOut, Settings, User, LogIn, UserPlus, Shield } from 'lucide-react';
+import { useAuth } from '../hooks/useAuth';
 import { useState, useEffect } from 'react';
 import { db } from '../services/firebase';
 import { doc, getDoc } from 'firebase/firestore';
@@ -34,7 +34,7 @@ export default function Sidebar() {
         <div className="hidden md:flex flex-col w-64 h-screen sticky top-0 bg-card-dark border-r border-[#333]">
             {/* Header */}
             <div className="p-6 flex flex-col items-center">
-                <div className="w-12 h-12 bg-primary rounded-xl flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(46,204,113,0.3)]">
+                <div className="w-12 h-12 bg-linear-to-br from-cyan-400 to-blue-500 rounded-xl flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(6,182,212,0.3)]">
                     <Droplets size={24} className="text-white" />
                 </div>
                 <h1 className="text-xl font-bold text-white tracking-wider">AquaSense</h1>
@@ -44,35 +44,57 @@ export default function Sidebar() {
                 </div>
             </div>
 
-            {/* User Profile */}
+            {/* User Profile or Auth Links */}
             <div className="px-6 py-4 mb-4">
-                <div className="bg-bg-dark/50 rounded-xl p-4 border border-white/5 flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
-                        <User size={20} />
+                {currentUser ? (
+                    <div className="bg-bg-dark/50 rounded-xl p-4 border border-white/5 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center text-primary">
+                            <User size={20} />
+                        </div>
+                        <div className="overflow-hidden">
+                            <div className="text-sm font-bold text-white truncate">{userData?.name || 'User'}</div>
+                            <div className="text-[10px] text-text-muted truncate lowercase">{currentUser?.email}</div>
+                        </div>
                     </div>
-                    <div className="overflow-hidden">
-                        <div className="text-sm font-bold text-white truncate">{userData?.name || 'User'}</div>
-                        <div className="text-[10px] text-text-muted truncate lowercase">{currentUser?.email}</div>
+                ) : (
+                    <div className="space-y-2">
+                        <NavLink to="/login" className="flex items-center gap-3 px-4 py-3 bg-primary/10 text-primary rounded-xl text-sm font-bold hover:bg-primary/20 transition-all border border-primary/20">
+                            <LogIn size={20} />
+                            Login
+                        </NavLink>
+                        <NavLink to="/signup" className="flex items-center gap-3 px-4 py-3 bg-white/5 text-white rounded-xl text-sm font-medium hover:bg-white/10 transition-all border border-white/5">
+                            <UserPlus size={20} />
+                            Sign Up
+                        </NavLink>
                     </div>
-                </div>
+                )}
             </div>
 
             {/* Navigation */}
             <div className="flex-1 px-4 py-2 space-y-1">
                 <NavItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" />
+                {currentUser?.email === 'albinbiju75100@gmail.com' && (
+                    <NavItem to="/admin" icon={Shield} label="Admin Portal" />
+                )}
                 <NavItem to="/about" icon={Users} label="About Team" />
                 <NavItem to="/settings" icon={Settings} label="Settings" />
             </div>
 
             {/* Footer */}
             <div className="p-4 border-t border-[#333]">
-                <button
-                    onClick={handleLogout}
-                    className="flex items-center gap-3 px-4 py-3 w-full text-sm font-medium text-text-muted hover:text-danger hover:bg-danger/10 rounded-lg transition-colors"
-                >
-                    <LogOut size={18} />
-                    Log Out
-                </button>
+                {currentUser ? (
+                    <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-3 px-4 py-3 w-full text-sm font-medium text-text-muted hover:text-danger hover:bg-danger/10 rounded-lg transition-colors"
+                    >
+                        <LogOut size={18} />
+                        Log Out
+                    </button>
+                ) : (
+                    <div className="px-4 py-3 text-[10px] text-text-muted uppercase tracking-widest text-center">
+                        Simulated Mode Active
+                    </div>
+                )}
             </div>
         </div>
     );

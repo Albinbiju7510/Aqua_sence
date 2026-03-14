@@ -14,6 +14,7 @@ const PINS = {
     VIBRATION_RMS: 'V3',
     PRESSURE: 'V4',
     VIBRATION_ALARM: 'V5',
+    VALVE: 'V6',
     RECALIBRATE: 'V10'
 };
 

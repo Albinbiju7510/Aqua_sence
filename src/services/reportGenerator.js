@@ -84,3 +84,67 @@ export const generateReport = (sensorData, alerts) => {
 
     doc.save(`AquaSense_Report_${new Date().toISOString().split('T')[0]}.pdf`);
 };
+
+export const generateTotalSummary = (alerts, thresholds) => {
+    const doc = new jsPDF();
+    const primaryColor = [79, 70, 229]; // Indigo 600
+
+    // Header
+    doc.setFillColor(...primaryColor);
+    doc.rect(0, 0, 210, 50, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(24);
+    doc.text("AquaSense Executive Summary", 14, 25);
+    doc.setFontSize(10);
+    doc.text(`System Configuration: Flow > ${thresholds?.flowLimit}L/min | Duration > ${thresholds?.leakDuration}min`, 14, 35);
+    doc.text(`Generated: ${new Date().toLocaleString()}`, 140, 35);
+
+    doc.setTextColor(0, 0, 0);
+    doc.setFontSize(16);
+    doc.text("Global System Health Metrics", 14, 70);
+
+    const leakAlerts = alerts.filter(a => a.type === 'Leak Detected');
+    const vibAlerts = alerts.filter(a => a.type === 'Vibration Alarm');
+    const resolved = alerts.filter(a => a.maintenanceStatus === 'resolved').length;
+    const pending = alerts.filter(a => a.maintenanceStatus === 'pending' || !a.maintenanceStatus).length;
+
+    const summaryStats = [
+        ["Metric", "Value", "Status"],
+        ["Total Anomalies Detected", alerts.length, "Review Required"],
+        ["Confirmed Leaks", leakAlerts.length, leakAlerts.length > 0 ? "Critical" : "Optimal"],
+        ["Vibration Events", vibAlerts.length, "Monitor"],
+        ["Maintenance: Resolved", resolved, "Healthy"],
+        ["Maintenance: Pending", pending, pending > 5 ? "Action Needed" : "Manageable"]
+    ];
+
+    autoTable(doc, {
+        startY: 75,
+        head: [summaryStats[0]],
+        body: summaryStats.slice(1),
+        theme: 'grid',
+        headStyles: { fillColor: primaryColor }
+    });
+
+    const finalY = doc.lastAutoTable.finalY + 20;
+    doc.setFontSize(14);
+    doc.text("Maintenance Backlog (Pending)", 14, finalY);
+
+    const backlogData = alerts
+        .filter(a => a.maintenanceStatus === 'pending' || !a.maintenanceStatus)
+        .slice(0, 25)
+        .map(a => [
+            new Date(a.timestamp).toLocaleDateString(),
+            a.type,
+            a.message
+        ]);
+
+    autoTable(doc, {
+        startY: finalY + 5,
+        head: [['Date', 'Anomaly Type', 'Description']],
+        body: backlogData,
+        theme: 'striped',
+        columnStyles: { 2: { cellWidth: 100 } }
+    });
+
+    return doc;
+};

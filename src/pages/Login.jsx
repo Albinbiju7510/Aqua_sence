@@ -1,8 +1,10 @@
 import { useRef, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
 import { Droplets, User, Lock, ArrowRight, Loader2 } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { db } from '../services/firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 export default function Login() {
     const emailRef = useRef();
@@ -17,7 +19,9 @@ export default function Login() {
         try {
             setError('');
             setLoading(true);
-            await login(emailRef.current.value, passwordRef.current.value);
+            const userCredential = await login(emailRef.current.value, passwordRef.current.value);
+            const user = userCredential.user;
+
             navigate('/dashboard');
         } catch (err) {
             console.error("Login Error Details:", err);

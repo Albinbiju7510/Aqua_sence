@@ -7,15 +7,15 @@ export default function ValueWidget({ title, value, unit, color = "#2ecc71", ico
                 style={{ backgroundColor: color }}
             />
 
-            <div className="mb-2 text-[#8e8e93] text-xs font-semibold uppercase tracking-wider">
+            <div className="mb-2 text-text-muted text-xs font-semibold uppercase tracking-wider">
                 {title}
             </div>
 
             <div className="flex items-end gap-1 mb-1">
-                <span className="text-3xl font-bold text-white" style={{ color: color }}>
+                <span className="text-4xl md:text-3xl font-bold text-white transition-all" style={{ color: color }}>
                     {value}
                 </span>
-                <span className="text-sm text-[#8e8e93] mb-1">{unit}</span>
+                <span className="text-sm text-text-muted mb-1">{unit}</span>
             </div>
 
             {Icon && (

@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useAuth } from '../contexts/AuthContext';
+import { useAuth } from '../hooks/useAuth';
 import { Link, useNavigate } from 'react-router-dom';
 import { db } from '../services/firebase';
 import { doc, setDoc } from 'firebase/firestore'; // Firestore functions
@@ -41,7 +41,7 @@ export default function Signup() {
                 const profileData = {
                     name: nameRef.current.value,
                     email: emailRef.current.value,
-                    role: "admin",
+                    role: emailRef.current.value === 'albinbiju75100@gmail.com' ? "admin" : "user",
                     status: "active",
                     createdAt: new Date().toISOString(),
                     blynkToken: "" // Initialize with empty token
